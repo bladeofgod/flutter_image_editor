@@ -14,25 +14,25 @@ public class ImageEditorPlugin implements FlutterPlugin, MethodCallHandler {
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
   /// when the Flutter Engine is detached from the Activity
-  private MethodChannel channel;
+  //private MethodChannel channel;
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "image_editor");
-    channel.setMethodCallHandler(this);
+//    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "image_editor");
+//    channel.setMethodCallHandler(this);
   }
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-    if (call.method.equals("getPlatformVersion")) {
-      result.success("Android " + android.os.Build.VERSION.RELEASE);
-    } else {
-      result.notImplemented();
-    }
+//    if (call.method.equals("getPlatformVersion")) {
+//      result.success("Android " + android.os.Build.VERSION.RELEASE);
+//    } else {
+//      result.notImplemented();
+//    }
   }
 
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-    channel.setMethodCallHandler(null);
+    //channel.setMethodCallHandler(null);
   }
 }
