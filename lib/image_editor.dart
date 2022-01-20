@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 
 import 'model/float_text_model.dart';
+import 'widget/drawing_board.dart';
 import 'widget/editor_panel_controller.dart';
 
 
