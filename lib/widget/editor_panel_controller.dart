@@ -73,24 +73,6 @@ class EditorPanelController {
     operateType.value = type;
   }
 
-  ///根据操作类型获取对应资源路径
-  String getOperateTypeRes(OperateType type) {
-    final bool isCurrent = isCurrentOperateType(type);
-    switch(type) {
-      case OperateType.non:
-        return '';
-      case OperateType.brush:
-        return isCurrent ? R.libAssetsIcEditGraffitiSelected : R.libAssetsIcEditGraffitiUnselected;
-      case OperateType.text:
-        return isCurrent ? R.libAssetsIcEditFontSelected : R.libAssetsIcEditFontUnselected;
-      case OperateType.flip:
-        return isCurrent ? R.libAssetsIcEditFlipSelected : R.libAssetsIcEditFlipUnselected;
-      case OperateType.rotated:
-        return isCurrent ? R.libAssetsIcEditRotateSelected : R.libAssetsIcEditRotateUnselected;
-      case OperateType.mosaic:
-        return isCurrent ? R.libAssetsIcEditMosaicSelected : R.libAssetsIcEditMosaicUnselected;
-    }
-  }
 
   ///拖动的对象
   /// * 无、 文字

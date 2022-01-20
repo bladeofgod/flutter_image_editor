@@ -12,6 +12,8 @@ import 'package:screenshot/screenshot.dart';
 import 'model/float_text_model.dart';
 import 'widget/drawing_board.dart';
 import 'widget/editor_panel_controller.dart';
+import 'widget/float_text_widget.dart';
+import 'widget/text_editor_page.dart';
 
 
 ///The editor's result.
