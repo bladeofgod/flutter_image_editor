@@ -4,23 +4,25 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:image_editor/model/float_text_model.dart';
 
-
+///The object taht are moving.
 enum MoveStuff{
   non,
-  text,//移动文字
+  text,
 }
 
-///操作类型
+
 enum OperateType{
   non,
-  brush,//涂鸦
-  text,//添加文字
-  flip,//翻转
-  rotated,//旋转
-  mosaic,//马赛克
+  brush,//drawing path
+  text,//add text to canvas
+  flip,//flip image
+  rotated,//rotate canvas
+  mosaic,//draw mosaic
 }
 
 class EditorPanelController {
+
+  static const defaultTrashColor = const Color(0x26ffffff);
 
   EditorPanelController({required this.screenSize}) {
     colorSelected = ValueNotifier(brushColor.first.value);
@@ -28,16 +30,14 @@ class EditorPanelController {
 
   final Size screenSize;
 
-  ///截图时为true (一次性)
-  /// * 用于隐藏非截图内容 如 底部控制bar
-  /// * 完成截图后，editor页面将会退出
+  ///take shot action listener
+  /// * it's for hide some non-relative ui.
+  /// * e.g. hide status bar, hide bottom bar
   ValueNotifier<bool> takeShot = ValueNotifier(false);
 
   ValueNotifier<bool> showTrashCan = ValueNotifier(false);
 
-  ///未激活垃圾桶背景
-  static const defaultTrashColor = const Color(0x26ffffff);
-
+  ///trash background color
   ValueNotifier<Color> trashColor = ValueNotifier(defaultTrashColor);
 
   ValueNotifier<bool> showAppBar = ValueNotifier(true);
@@ -46,10 +46,11 @@ class EditorPanelController {
 
   ValueNotifier<OperateType> operateType = ValueNotifier(OperateType.non);
 
-  ///是否是当前操作类型
+  ///Is current operate type
   bool isCurrentOperateType(OperateType type) => type.index == operateType.value.index;
 
-  ///是否显示副面板
+  /// is need to show second panel.
+  ///  * in some operate type like drawing path, it need a 2nd panel for change color.
   bool show2ndPanel() => operateType.value == OperateType.brush || operateType.value == OperateType.mosaic;
 
   final List<Color> brushColor = const <Color>[
@@ -68,59 +69,56 @@ class EditorPanelController {
     colorSelected.value = color.value;
   }
 
-  ///切换操作类型
+  ///switch operate type
   void switchOperateType(OperateType type) {
     operateType.value = type;
   }
 
 
-  ///拖动的对象
-  /// * 无、 文字
+  ///moving object
+  /// * non : not moving.
   MoveStuff moveStuff = MoveStuff.non;
 
-  ///垃圾桶位置
+  ///trash can position
   Offset trashCanPosition = Offset(111, (20 + window.padding.bottom));
 
-  ///垃圾桶尺寸
+  ///trash can size.
   final Size tcSize = Size(153, 77);
 
-  ///标记垃圾桶位置
-  //set markTrashCanPosition(Offset offset) => trashCanPosition = offset;
-
-  ///顶部和底部面板的滑动时间
+  ///The top and bottom panel's slide duration.
   final Duration panelDuration = const Duration(milliseconds: 300);
 
-  ///隐藏控制和app bar
+  ///hide bottom and top(app) bar.
   void hidePanel() {
     showAppBar.value = false;
     showBottomBar.value = false;
     switchTrashCan(true);
   }
 
-  ///显示控制和app bar
+  ///show bottom and top(app) bar.
   void showPanel() {
     showAppBar.value = true;
     showBottomBar.value = true;
     switchTrashCan(false);
   }
 
-  ///显/隐 垃圾桶
+  ///hide/show trash can.
   void switchTrashCan(bool show) {
     showTrashCan.value = show;
   }
 
-  ///切换垃圾桶颜色
+  ///switch trash can's color.
   void switchTrashCanColor(bool isInside) {
     trashColor.value = isInside ? Colors.red : defaultTrashColor;
   }
 
-  ///移动文字
+  ///move text.
   void moveText(FloatTextModel model) {
     moveStuff = MoveStuff.text;
     movingTarget = model;
   }
 
-  ///释放移动文字
+  ///release the moving-text.
   void releaseText(DragEndDetails details, FloatTextModel model, Function throwCall) {
     if(isThrowText(pointerUpPosition??Offset.zero, model)) {
       throwCall.call();
@@ -128,7 +126,7 @@ class EditorPanelController {
     doIdle();
   }
 
-  ///停止移动
+  ///stop moving.
   void doIdle() {
     movingTarget = null;
     pointerUpPosition = null;
@@ -136,14 +134,15 @@ class EditorPanelController {
     switchTrashCanColor(false);
   }
 
-  ///移动的目标
+  ///moving object.
+  /// * must based on [BaseFloatModel].
+  /// * most time it's used to find the [movingTarget] that who just realeased.
   BaseFloatModel? movingTarget;
 
-  ///缓存移动完成后的最后一个触摸点
-  /// * 由于控制拆分，所以此处需要缓存一个。
+  ///cache the target taht just released.
   Offset? pointerUpPosition;
 
-  ///指针移动中
+  ///pointer moving's callback
   void pointerMoving(PointerMoveEvent event) {
     pointerUpPosition = event.localPosition;
     switch(moveStuff) {
@@ -157,7 +156,7 @@ class EditorPanelController {
     }
   }
 
-  ///是否丢弃text widget
+  ///decided whether the text is deleted or not.
   bool isThrowText(Offset pointer,BaseFloatModel target) {
     final Rect textR = Rect.fromCenter(center: pointer,
         width: target.floatSize?.width??1,
