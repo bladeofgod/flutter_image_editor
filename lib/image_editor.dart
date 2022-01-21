@@ -57,7 +57,7 @@ class ImageEditorState extends State<ImageEditor>
 
   double get canvasHeight => screenHeight - bottomBarHeight - headerHeight;
 
-  Widget get controlBtnSpacing => 22.vGap;
+  Widget get controlBtnSpacing => 12.hGap;
 
   void saveImage() {
     _panelController.takeShot.value = true;
@@ -121,7 +121,6 @@ class ImageEditorState extends State<ImageEditor>
                                   iconTheme: IconThemeData(color: Colors.white, size: 16),
                                   leading: backWidget(),
                                   backgroundColor: Colors.transparent,
-                                  //actionBackgroundColor: Colors.transparent,
                                   actions: [
                                     resetWidget(onTap: resetCanvasPlate)
                                   ],
@@ -130,7 +129,7 @@ class ImageEditorState extends State<ImageEditor>
                             }),
                         duration: _panelController.panelDuration);
                   }),
-              //画布区
+              //canvas
               Positioned.fromRect(
                   rect: Rect.fromLTWH(0, headerHeight, screenWidth, canvasHeight),
                   child: RotatedBox(
@@ -140,12 +139,11 @@ class ImageEditorState extends State<ImageEditor>
                       children: [
                         _buildImage(),
                         _buildBrushCanvas(),
-                        //删除区域在画布外面，所以text canvas 移动到顶层
                         //buildTextCanvas(),
                       ],
                     ),
                   )),
-              //控制bar
+              //bottom operation(control) bar
               ValueListenableBuilder<bool>(
                   valueListenable: _panelController.showBottomBar,
                   builder: (ctx, value, child) {
@@ -164,7 +162,7 @@ class ImageEditorState extends State<ImageEditor>
                         ),
                         duration: _panelController.panelDuration);
                   }),
-              //垃圾桶
+              //trash bin
               ValueListenableBuilder<bool>(
                   valueListenable: _panelController.showTrashCan,
                   builder: (ctx, value, child) {
@@ -174,7 +172,7 @@ class ImageEditorState extends State<ImageEditor>
                         child: _buildTrashCan(),
                         duration: _panelController.panelDuration);
                   }),
-              //文字区域
+              //text canvas
               Positioned.fromRect(
                   rect: Rect.fromLTWH(0, headerHeight, screenWidth, screenHeight),
                   child: RotatedBox(
@@ -204,7 +202,6 @@ class ImageEditorState extends State<ImageEditor>
                 return Opacity(
                   opacity: _panelController.show2ndPanel() ? 1 : 0,
                   child: Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if(value == OperateType.brush)
                         ..._panelController.brushColor
@@ -277,9 +274,9 @@ class ImageEditorState extends State<ImageEditor>
             child: Column(
               children: [
                 12.vGap,
-                Icon(Icons.delete_forever_outlined, size: 32,),
+                Icon(Icons.delete_outline, size: 32, color: Colors.white,),
                 4.vGap,
-                Text(isActive ? '拖动到此处删除' : '松手即可删除',
+                Text(isActive ? 'move here for delete' : 'release to delete',
                   style: TextStyle(color: Colors.white, fontSize: 12),)
               ],
             ),
@@ -363,7 +360,7 @@ mixin LittleWidgetBinding<T extends StatefulWidget> on State<T> {
             borderRadius: BorderRadius.all(Radius.circular(6)),
             gradient: const LinearGradient(colors: [Colors.green, Colors.greenAccent])),
         child: Text(
-          '完成',
+          'Done',
           style: TextStyle(fontSize: 15, color: Colors.white),
         ),
       ),
@@ -401,7 +398,7 @@ mixin LittleWidgetBinding<T extends StatefulWidget> on State<T> {
             offstage: value != OperateType.rotated,
             child: GestureDetector(
               onTap: onTap,
-              child: Text('复原', style: TextStyle(color: Colors.white, fontSize: 16),),
+              child: Text('Reset', style: TextStyle(color: Colors.white, fontSize: 16),),
             ),);
         },
       ),
@@ -425,19 +422,20 @@ mixin RotateCanvasBinding<T extends StatefulWidget> on State<T> {
   /// * 180 angle each time.
   double flipValue = 0;
 
-  ///翻转图片画布
+  ///flip canvas
   void flipCanvas() {
     flipValue = flipValue == 0 ? math.pi : 0;
     setState(() {});
   }
 
-  ///旋转画板
+  ///routate canvas
+  /// * will effect image, text, drawing board
   void rotateCanvasPlate() {
     rotateValue++;
     setState(() {});
   }
 
-  ///复原画板
+  ///reset canvas
   void resetCanvasPlate() {
     rotateValue = 0;
     setState(() {
@@ -447,7 +445,7 @@ mixin RotateCanvasBinding<T extends StatefulWidget> on State<T> {
 
 }
 
-///文本
+///text painting
 mixin TextCanvasBinding<T extends StatefulWidget> on State<T> {
   late StateSetter textSetter;
 
@@ -458,7 +456,7 @@ mixin TextCanvasBinding<T extends StatefulWidget> on State<T> {
     refreshTextCanvas();
   }
 
-  ///删除一个text
+  ///delete a text from canvas
   void deleteTextWidget(FloatTextModel target) {
     textModels.remove(target);
     refreshTextCanvas();
@@ -507,12 +505,12 @@ mixin TextCanvasBinding<T extends StatefulWidget> on State<T> {
   Widget _wrapWithGesture(Widget child, FloatTextModel model) {
     void pointerDetach(DragEndDetails? details) {
       if (details != null) {
-        //正常结束事件
+        //touch event up
         realState?._panelController.releaseText(details, model, () {
           deleteTextWidget(model);
         });
       } else {
-        //意外取消
+        //touch event cancel
         realState?._panelController.doIdle();
       }
       model.isSelected = false;
@@ -542,16 +540,16 @@ mixin TextCanvasBinding<T extends StatefulWidget> on State<T> {
   }
 }
 
-///涂鸦面板
+///drawing board
 mixin SignatureBinding<T extends StatefulWidget> on State<T> {
   final List<Widget> pathRecord = [];
 
   late StateSetter canvasSetter;
 
-  ///画笔宽度
+  ///painter stroke width.
   double pStrockWidth = 5;
 
-  ///画笔颜色
+  ///painter color
   Color pColor = Colors.redAccent;
 
   ///painter controller
@@ -563,14 +561,14 @@ mixin SignatureBinding<T extends StatefulWidget> on State<T> {
     pColor = Color(realState?._panelController.colorSelected.value ?? Colors.yellow.value);
   }
 
-  ///切换画笔模式
-  /// * 颜色、马赛克
+  ///switch painter's style
+  /// * e.g. color、mosaic
   void switchPainterMode(DrawStyle style) {
     changePainterColor(pColor);
     painterController.drawStyle = style;
   }
 
-  ///更换画笔颜色
+  ///change painter's color
   void changePainterColor(Color color) async {
     pColor = color;
     realState?._panelController.selectColor(color);
@@ -591,7 +589,7 @@ mixin SignatureBinding<T extends StatefulWidget> on State<T> {
 
   void _refreshBrushCanvas() {
     pathRecord.removeLast();
-    //添加一个新图层
+    //add new layer.
     pathRecord.add(Signature(
       controller: painterController,
       backgroundColor: Colors.transparent,
@@ -599,12 +597,12 @@ mixin SignatureBinding<T extends StatefulWidget> on State<T> {
     _refreshCanvas();
   }
 
-  ///撤销上一步
+  ///undo last drawing.
   void undo() {
     painterController.undo();
   }
 
-  ///刷新画布
+  ///refresh canvas.
   void _refreshCanvas() {
     canvasSetter(() {});
   }
