@@ -57,7 +57,7 @@ class ImageEditorState extends State<ImageEditor>
 
   double get canvasHeight => screenHeight - bottomBarHeight - headerHeight;
 
-  Widget get controlBtnSpacing => 12.hGap;
+  Widget get controlBtnSpacing => 5.hGap;
 
   void saveImage() {
     _panelController.takeShot.value = true;
@@ -225,17 +225,17 @@ class ImageEditorState extends State<ImageEditor>
             height: bottomBarHeight / 2,
             child: Row(
               children: [
-                _buildButton(OperateType.brush, '涂鸦', onPressed: () {
+                _buildButton(OperateType.brush, 'Draw', onPressed: () {
                   switchPainterMode(DrawStyle.normal);
                 }),
                 controlBtnSpacing,
-                _buildButton(OperateType.text, '文本', onPressed: toTextEditorPage),
+                _buildButton(OperateType.text, 'Text', onPressed: toTextEditorPage),
                 controlBtnSpacing,
-                _buildButton(OperateType.flip, '翻转', onPressed: flipCanvas),
+                _buildButton(OperateType.flip, 'Flip', onPressed: flipCanvas),
                 controlBtnSpacing,
-                _buildButton(OperateType.rotated, '旋转', onPressed: rotateCanvasPlate),
+                _buildButton(OperateType.rotated, 'Rotate', onPressed: rotateCanvasPlate),
                 controlBtnSpacing,
-                _buildButton(OperateType.mosaic, '马赛克', onPressed: () {
+                _buildButton(OperateType.mosaic, 'Mosaic', onPressed: () {
                   switchPainterMode(DrawStyle.mosaic);
                 }),
                 Expanded(child: SizedBox()),
@@ -294,7 +294,7 @@ class ImageEditorState extends State<ImageEditor>
         valueListenable: _panelController.operateType,
         builder: (ctx, value, child) {
           return SizedBox(
-            width: 34,
+            width: 44,
             height: 41,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
