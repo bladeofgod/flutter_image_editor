@@ -133,16 +133,13 @@ class ImageEditorState extends State<ImageEditor>
                   rect: Rect.fromLTWH(0, headerHeight, screenWidth, canvasHeight),
                   child: RotatedBox(
                     quarterTurns: rotateValue,
-                    child: Container(
-                      color: Colors.white,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          _buildImage(),
-                          _buildBrushCanvas(),
-                          //buildTextCanvas(),
-                        ],
-                      ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        _buildImage(),
+                        _buildBrushCanvas(),
+                        //buildTextCanvas(),
+                      ],
                     ),
                   )),
               //bottom operation(control) bar
