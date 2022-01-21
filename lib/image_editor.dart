@@ -49,9 +49,9 @@ class ImageEditor extends StatefulWidget {
 
 class ImageEditorState extends State<ImageEditor>
     with SignatureBinding, ScreenShotBinding, TextCanvasBinding, RotateCanvasBinding, LittleWidgetBinding, WindowUiBinding {
-  late EditorPanelController _panelController ;
+  final EditorPanelController _panelController = EditorPanelController();
 
-  double get headerHeight => windowStatusBarHeight + 44;
+  double get headerHeight => windowStatusBarHeight;
 
   double get bottomBarHeight => 121 + windowBottomBarHeight;
 
@@ -87,7 +87,6 @@ class ImageEditorState extends State<ImageEditor>
 
   @override
   void initState() {
-    _panelController = EditorPanelController();
     super.initState();
     initPainter();
   }
@@ -134,13 +133,16 @@ class ImageEditorState extends State<ImageEditor>
                   rect: Rect.fromLTWH(0, headerHeight, screenWidth, canvasHeight),
                   child: RotatedBox(
                     quarterTurns: rotateValue,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        _buildImage(),
-                        _buildBrushCanvas(),
-                        //buildTextCanvas(),
-                      ],
+                    child: Container(
+                      color: Colors.white,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          _buildImage(),
+                          _buildBrushCanvas(),
+                          //buildTextCanvas(),
+                        ],
+                      ),
                     ),
                   )),
               //bottom operation(control) bar
