@@ -24,11 +24,11 @@ class EditorPanelController {
 
   static const defaultTrashColor = const Color(0x26ffffff);
 
-  EditorPanelController({required this.screenSize}) {
+  EditorPanelController() {
     colorSelected = ValueNotifier(brushColor.first.value);
   }
 
-  final Size screenSize;
+  Size? screenSize;
 
   ///take shot action listener
   /// * it's for hide some non-relative ui.
@@ -162,8 +162,8 @@ class EditorPanelController {
         width: target.floatSize?.width??1,
         height: target.floatSize?.height??1);
     final Rect tcR = Rect.fromLTWH(
-        screenSize.width - trashCanPosition.dx,
-        screenSize.height - trashCanPosition.dy - tcSize.height,
+        screenSize!.width - trashCanPosition.dx,
+        screenSize!.height - trashCanPosition.dy - tcSize.height,
         tcSize.width,
         tcSize.height);
     return textR.overlaps(tcR);

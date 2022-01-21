@@ -49,17 +49,13 @@ class ImageEditor extends StatefulWidget {
 
 class ImageEditorState extends State<ImageEditor>
     with SignatureBinding, ScreenShotBinding, TextCanvasBinding, RotateCanvasBinding, LittleWidgetBinding, WindowUiBinding {
-  late final EditorPanelController _panelController ;
+  late EditorPanelController _panelController ;
 
   double get headerHeight => windowStatusBarHeight + 44;
 
   double get bottomBarHeight => 121 + windowBottomBarHeight;
 
   double get canvasHeight => screenHeight - bottomBarHeight - headerHeight;
-
-  double get screenHeight => screenHeight;
-
-  double get screenWidth => screenWidth;
 
   Widget get controlBtnSpacing => 22.vGap;
 
@@ -91,13 +87,14 @@ class ImageEditorState extends State<ImageEditor>
 
   @override
   void initState() {
+    _panelController = EditorPanelController();
     super.initState();
-    _panelController = EditorPanelController(screenSize: windowSize);
     initPainter();
   }
 
   @override
   Widget build(BuildContext context) {
+    _panelController.screenSize ??= windowSize;
     return Material(
       color: Colors.black,
       child: Listener(
