@@ -34,34 +34,36 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
     Color(0xFF4E43DB),
   ];
 
-  ///字体颜色
+  ///text's color
   late ValueNotifier<int> selectedColor;
 
   Color get _textColor => Color(selectedColor.value);
 
-  ///字体大小
+  ///text's size
   double _size = 14;
+
+  ///text font weight
+  FontWeight _fontWeight = FontWeight.normal;
 
   FloatTextModel buildModel() {
     RenderObject? ro = filedKey.currentContext?.findRenderObject();
     Offset offset = Offset(100, 200);
     if (ro is RenderBox) {
-      //需要修正一下dy的值
+      //adjust text's dy value
       offset = ro.localToGlobal(Offset.zero).translate(0, -(44 + windowStatusBarHeight));
     }
     return FloatTextModel(text: _controller.text, top: offset.dy, left: offset.dx, style: TextStyle(fontSize: _size, color: _textColor));
   }
 
-  void pop() {
-    if (_controller.text.isEmpty) {
-      Navigator.pop(context);
-    } else {
-      popWithResult();
-    }
-  }
-
   void popWithResult() {
     Navigator.pop(context, buildModel());
+  }
+
+  void tapBoldBtn() {
+    _fontWeight = _fontWeight == FontWeight.bold ? FontWeight.normal : FontWeight.bold;
+    setState(() {
+
+    });
   }
 
   @override
@@ -71,6 +73,13 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
     Future.delayed(const Duration(milliseconds: 160), () {
       if (mounted) _node.requestFocus();
     });
+  }
+
+  @override
+  void dispose() {
+    _node.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -98,14 +107,15 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
                 },
                 child: Container(
                   height: 44,
-                  padding: EdgeInsets.only(left: 16, top: 12),
-                  child: Text('取消', style: TextStyle(color: Colors.white, fontSize: 16),),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: 12, bottom: 12),
+                  child: Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 16),),
                 ),
               ),
               actions: [
                 Padding(
                   padding: EdgeInsets.only(top: 12, bottom: 12 , right: 16),
-                  child: doneButtonWidget(onPressed: pop),
+                  child: doneButtonWidget(onPressed: popWithResult),
                 ),
               ],
             ),
@@ -113,7 +123,7 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(child: SizedBox()),
-                //文字区域
+                //text area
                 Container(
                   width: screenWidth,
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -124,7 +134,7 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
                     controller: _controller,
                     focusNode: _node,
                     cursorColor: const Color(0xFFF83112),
-                    style: TextStyle(color: _textColor, fontSize: _size),
+                    style: TextStyle(color: _textColor, fontSize: _size, fontWeight: _fontWeight),
                     decoration: InputDecoration(
                         isCollapsed: true,
                         border: InputBorder.none
@@ -132,7 +142,7 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
                   ),
                 ),
                 Expanded(child: SizedBox()),
-                //滑块
+                //slider
                 Container(
                   height: 36,
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -140,21 +150,24 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
                   //color: Colors.white,
                   child: Row(
                     children: [
-                      Text(
-                        '文字',
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      GestureDetector(
+                        onTap: tapBoldBtn,
+                        child: Text(
+                          'Bold',
+                          style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
                       ),
                       24.hGap,
-                      txtFlatWidget('小'),
+                      txtFlatWidget('small'),
                       8.hGap,
                       Expanded(child: _buildSlider()),
                       8.hGap,
-                      txtFlatWidget('大'),
+                      txtFlatWidget('big'),
                       2.hGap,
                     ],
                   ),
                 ),
-                //颜色
+                //color selector
                 Container(
                   height: 41,
                   padding: EdgeInsets.symmetric(horizontal: 20),
