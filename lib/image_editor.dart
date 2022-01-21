@@ -371,7 +371,7 @@ mixin LittleWidgetBinding<T extends StatefulWidget> on State<T> {
   Widget unDoWidget({VoidCallback? onPressed}) {
     return GestureDetector(
       onTap: onPressed,
-      child: Icon(Icons.arrow_back, size: 26,),
+      child: Icon(Icons.undo, size: 20, color: Colors.white,),
     );
   }
 

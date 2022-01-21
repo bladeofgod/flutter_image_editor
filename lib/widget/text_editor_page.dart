@@ -104,7 +104,7 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
               ),
               actions: [
                 Padding(
-                  padding: EdgeInsets.only(top: 6, bottom: 6 , right: 16),
+                  padding: EdgeInsets.only(top: 12, bottom: 12 , right: 16),
                   child: doneButtonWidget(onPressed: pop),
                 ),
               ],
