@@ -210,7 +210,8 @@ class ImageEditorState extends State<ImageEditor>
                 return Opacity(
                   opacity: _panelController.show2ndPanel() ? 1 : 0,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: value == OperateType.brush ?
+                        MainAxisAlignment.spaceAround : MainAxisAlignment.end,
                     children: [
                       if(value == OperateType.brush)
                         ..._panelController.brushColor
@@ -223,7 +224,9 @@ class ImageEditorState extends State<ImageEditor>
                         ))
                             .toList(),
                       35.hGap,
-                      unDoWidget(onPressed: undo)
+                      unDoWidget(onPressed: undo),
+                      if(value == OperateType.mosaic)
+                        7.hGap,
                     ],
                   ),
                 );
