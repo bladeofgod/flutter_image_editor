@@ -55,10 +55,13 @@ class ImageEditorState extends State<ImageEditor>
 
   double get bottomBarHeight => 121 + windowBottomBarHeight;
 
+  ///Edit arear height.
   double get canvasHeight => screenHeight - bottomBarHeight - headerHeight;
 
+  ///Operation panel button's horizontal space.
   Widget get controlBtnSpacing => 5.hGap;
 
+  ///Save the edited-image to [widget.savePath] or [getTemporaryDirectory()].
   void saveImage() {
     _panelController.takeShot.value = true;
     screenshotController.capture(pixelRatio: 1.0).then((value) async {

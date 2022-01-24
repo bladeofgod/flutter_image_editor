@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_editor/model/float_text_model.dart';
 
 
-
 class FloatTextWidget extends StatefulWidget{
 
   final FloatTextModel textModel;
@@ -57,6 +56,7 @@ class FloatTextWidgetState extends State<FloatTextWidget> {
 }
 
 
+///Draw dash border.
 class DashBorder extends Border{
 
   DashBorder({
@@ -84,30 +84,29 @@ class DashBorder extends Border{
         BorderRadius? borderRadius,
       }) {
     if (isUniform) {
-      // 画笔
       Paint dashedPaint = Paint()
         ..color = dashColor
         ..strokeWidth = strokeWidth
         ..style = PaintingStyle.stroke;
-      // 顶部线
+      // top line
       Path _topPath = getDashedPath(
         a: math.Point(rect.topLeft.dx, rect.topLeft.dy),
         b: math.Point(rect.topRight.dx, rect.topRight.dy),
         gap: gap,
       );
-      // 右边线
+      // right line
       Path _rightPath = getDashedPath(
         a: math.Point(rect.topRight.dx, rect.topRight.dy),
         b: math.Point(rect.bottomRight.dx, rect.bottomRight.dy),
         gap: gap,
       );
-      // 下边的线
+      // bottom line
       Path _bottomPath = getDashedPath(
         a: math.Point(rect.bottomLeft.dx, rect.bottomLeft.dy),
         b: math.Point(rect.bottomRight.dx, rect.bottomRight.dy),
         gap: gap,
       );
-      // 左边线
+      // left line
       Path _leftPath = getDashedPath(
         a: math.Point(rect.topLeft.dx, rect.topLeft.dy),
         b: math.Point(rect.bottomLeft.dx, rect.bottomLeft.dy),
