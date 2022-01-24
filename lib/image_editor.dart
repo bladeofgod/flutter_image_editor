@@ -204,6 +204,7 @@ class ImageEditorState extends State<ImageEditor>
                 return Opacity(
                   opacity: _panelController.show2ndPanel() ? 1 : 0,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       if(value == OperateType.brush)
                         ..._panelController.brushColor
@@ -215,7 +216,7 @@ class ImageEditorState extends State<ImageEditor>
                           },
                         ))
                             .toList(),
-                      Expanded(child: SizedBox()),
+                      35.hGap,
                       unDoWidget(onPressed: undo)
                     ],
                   ),
@@ -663,6 +664,7 @@ extension _BaseImageEditorState on State {
   }
 }
 
+///the color selected.
 typedef OnColorSelected = void Function(Color color);
 
 class CircleColorWidget extends StatefulWidget {
@@ -694,7 +696,6 @@ class CircleColorWidgetState extends State<CircleColorWidget> {
           return Container(
             width: size,
             height: size,
-            margin: EdgeInsets.only(right: 20),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.white, width: value == widget.color.value ? 4 : 2),
               shape: BoxShape.circle,
