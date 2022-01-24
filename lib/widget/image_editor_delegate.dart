@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:image_editor/flutter_image_editor.dart';
+import 'package:image_editor/widget/float_text_widget.dart';
 import 'package:image_editor/widget/text_editor_page.dart';
 
 import 'editor_panel_controller.dart';
+import 'slider_widget.dart';
 
 
 class DefaultTextConfigModel extends TextConfigModel{
@@ -17,6 +19,9 @@ class DefaultTextConfigModel extends TextConfigModel{
   @override
   double get sliderUpLimit => 36;
 
+  @override
+  Color get cursorColor => const Color(0xFFF83112);
+
 }
 
 class DefaultImageEditorDelegate extends ImageEditorDelegate{
@@ -24,77 +29,93 @@ class DefaultImageEditorDelegate extends ImageEditorDelegate{
   Color operatorStatuscolor(bool choosen) => choosen ? Colors.red : Colors.white;
 
   @override
-  Widget addTextWidget(double limitSize, OperateType type, {required bool choosen}) {
-    // TODO: implement addTextWidget
-    throw UnimplementedError();
-  }
+  List<Color> get brushColors => const <Color>[
+    Color(0xFFFA4D32),
+    Color(0xFFFF7F1E),
+    Color(0xFF2DA24A),
+    Color(0xFFF2F2F2),
+    Color(0xFF222222),
+    Color(0xFF1F8BE5),
+    Color(0xFF4E43DB),
+  ];
+
+  @override
+  List<Color> get textColors => const <Color>[
+    Color(0xFFFA4D32),
+    Color(0xFFFF7F1E),
+    Color(0xFF2DA24A),
+    Color(0xFFF2F2F2),
+    Color(0xFF222222),
+    Color(0xFF1F8BE5),
+    Color(0xFF4E43DB),
+  ];
 
   @override
   Widget backBtnWidget(double limitSize) {
-    // TODO: implement backBtnWidget
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement brushColors
-  List<Color> get brushColors => throw UnimplementedError();
-
-  @override
-  Widget brushWidget(double limitSize, OperateType type, {required bool choosen}) {
-    // TODO: implement brushWidget
-    throw UnimplementedError();
+    return Icon(Icons.arrow_back_ios_new, size: limitSize);
   }
 
   @override
   Widget doneWidget(BoxConstraints constraints) {
-    // TODO: implement doneWidget
-    throw UnimplementedError();
+    return Container(
+      constraints: constraints,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+          gradient: const LinearGradient(colors: [Colors.green, Colors.greenAccent])),
+      child: Text(
+        'Done',
+        style: TextStyle(fontSize: 15, color: Colors.white),
+      ),
+    );
+  }
+
+  @override
+  Widget brushWidget(double limitSize, OperateType type, {required bool choosen}) {
+    return Icon(Icons.brush_outlined, size: limitSize, color: operatorStatuscolor(choosen));
+  }
+
+  @override
+  Widget addTextWidget(double limitSize, OperateType type, {required bool choosen}) {
+    return Icon(Icons.notes, size: limitSize, color: operatorStatuscolor(choosen));
+  }
+
+  @override
+  Widget rotateWidget(double limitSize, OperateType type, {required bool choosen}) {
+    return Icon(Icons.rotate_right, size: limitSize, color: operatorStatuscolor(choosen));
   }
 
   @override
   Widget flipWidget(double limitSize, OperateType type, {required bool choosen}) {
-    // TODO: implement flipWidget
-    throw UnimplementedError();
+    return Icon(Icons.flip, size: limitSize, color: operatorStatuscolor(choosen));
   }
 
   @override
   Widget mosaicWidget(double limitSize, OperateType type, {required bool choosen}) {
-    // TODO: implement mosaicWidget
-    throw UnimplementedError();
+    return Icon(Icons.auto_awesome_mosaic, size: limitSize, color: operatorStatuscolor(choosen));
   }
 
   @override
-  // TODO: implement resetWidget
-  Widget get resetWidget => throw UnimplementedError();
+  Widget get resetWidget => Text('Reset', style: TextStyle(color: Colors.white, fontSize: 16));
 
   @override
-  Widget rotateWidget(double limitSize, OperateType type, {required bool choosen}) {
-    // TODO: implement rotateWidget
-    throw UnimplementedError();
-  }
+  SliderThemeData sliderThemeData(BuildContext context) => SliderTheme.of(context).copyWith(
+    trackHeight: 2,
+    thumbColor: Colors.white,
+    disabledThumbColor: Colors.white,
+    activeTrackColor: const Color(0xFFF83112),
+    inactiveTrackColor: Colors.white.withOpacity(0.5),
+    overlayShape: CustomRoundSliderOverlayShape(),
+  );
 
   @override
-  // TODO: implement sliderThemeData
-  SliderThemeData get sliderThemeData => throw UnimplementedError();
+  TextConfigModel get textConfigModel => DefaultTextConfigModel();
 
   @override
-  // TODO: implement textColors
-  List<Color> get textColors => throw UnimplementedError();
+  Border get textSelectedBorder => DashBorder();
 
   @override
-  // TODO: implement textConfigModel
-  TextConfigModel get textConfigModel => throw UnimplementedError();
-
-  @override
-  // TODO: implement textSelectedBorder
-  Border get textSelectedBorder => throw UnimplementedError();
-
-  @override
-  Widget undoWidget(double limitSize) {
-    // TODO: implement undoWidget
-    throw UnimplementedError();
-  }
-
+  Widget undoWidget(double limitSize) => Icon(Icons.undo, size: limitSize, color: Colors.white);
 
 }
 
@@ -109,6 +130,13 @@ abstract class TextConfigModel{
 
   ///initial size
   double get initSize;
+
+  ///input field's cursor color.
+  Color get cursorColor;
+
+  bool get isLegal => initSize >= sliderBottomLimit && initSize <= sliderUpLimit;
+
+
 }
 
 
@@ -155,7 +183,7 @@ abstract class ImageEditorDelegate{
   List<Color> get textColors;
 
   ///Slider's theme data
-  SliderThemeData get sliderThemeData;
+  SliderThemeData sliderThemeData(BuildContext context);
 
   ///Text config model
   /// * more see [TextEditorPage]

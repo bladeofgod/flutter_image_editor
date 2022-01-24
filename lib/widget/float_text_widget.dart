@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:image_editor/flutter_image_editor.dart';
 import 'package:image_editor/model/float_text_model.dart';
 
 
@@ -43,7 +44,7 @@ class FloatTextWidgetState extends State<FloatTextWidget> {
       ),
       decoration: BoxDecoration(
         border: model.isSelected ?
-            DashBorder()
+            ImageEditor.uiDelegate.textSelectedBorder
             : null
       ),
       child: Text(

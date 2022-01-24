@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:image_editor/widget/image_editor_delegate.dart';
 import 'dart:ui' as ui;
 
 import 'extension/num_extension.dart';
@@ -31,6 +32,9 @@ class EditorImageResult {
 }
 
 class ImageEditor extends StatefulWidget {
+
+  const ImageEditor({Key? key, required this.originImage, this.savePath}) : super(key: key);
+
   ///origin image
   /// * input for edit
   final File originImage;
@@ -39,7 +43,9 @@ class ImageEditor extends StatefulWidget {
   /// * if null will save in temporary file.
   final Directory? savePath;
 
-  const ImageEditor({Key? key, required this.originImage, this.savePath}) : super(key: key);
+  ///[uiDelegate] is determine the editor's ui style.
+  ///You can extends [ImageEditorDelegate] and custome it by youself.
+  static ImageEditorDelegate uiDelegate = DefaultImageEditorDelegate();
 
   @override
   State<StatefulWidget> createState() {
@@ -328,45 +334,20 @@ mixin LittleWidgetBinding<T extends StatefulWidget> on State<T> {
       onTap: onPressed ?? () {
         Navigator.pop(context);
       },
-      child: Icon(Icons.arrow_back_ios_new, size: 22,),
+      child: ImageEditor.uiDelegate.buildBackWidget(),
     );
   }
 
   ///operation button in control bar
   Widget getOperateTypeRes(OperateType type, {required bool choosen}) {
-    final Color color = choosen ? Colors.red : Colors.white;
-    switch(type) {
-      case OperateType.non:
-        return SizedBox();
-      case OperateType.brush:
-        return Icon(Icons.brush_outlined, size: 24, color: color,);
-      case OperateType.text:
-        return Icon(Icons.notes, size: 24, color: color,);
-      case OperateType.flip:
-        return Icon(Icons.flip, size: 24, color: color,);
-      case OperateType.rotated:
-        return Icon(Icons.rotate_right, size: 24, color: color,);
-      case OperateType.mosaic:
-        return Icon(Icons.auto_awesome_mosaic, size: 24, color: color,);
-    }
+    return ImageEditor.uiDelegate.buildOperateWidget(type, choosen: choosen);
   }
   
   ///action done widget
   Widget doneButtonWidget({VoidCallback? onPressed}) {
     return GestureDetector(
       onTap: onPressed,
-      child: Container(
-        width: 54,
-        height: 32,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-            gradient: const LinearGradient(colors: [Colors.green, Colors.greenAccent])),
-        child: Text(
-          'Done',
-          style: TextStyle(fontSize: 15, color: Colors.white),
-        ),
-      ),
+      child: ImageEditor.uiDelegate.buildDoneWidget(),
     );
   }
 
@@ -374,7 +355,7 @@ mixin LittleWidgetBinding<T extends StatefulWidget> on State<T> {
   Widget unDoWidget({VoidCallback? onPressed}) {
     return GestureDetector(
       onTap: onPressed,
-      child: Icon(Icons.undo, size: 20, color: Colors.white,),
+      child: ImageEditor.uiDelegate.buildUndoWidget(),
     );
   }
 
@@ -401,7 +382,7 @@ mixin LittleWidgetBinding<T extends StatefulWidget> on State<T> {
             offstage: value != OperateType.rotated,
             child: GestureDetector(
               onTap: onTap,
-              child: Text('Reset', style: TextStyle(color: Colors.white, fontSize: 16),),
+              child: ImageEditor.uiDelegate.resetWidget,
             ),);
         },
       ),

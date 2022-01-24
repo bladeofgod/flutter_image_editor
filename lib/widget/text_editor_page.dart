@@ -6,6 +6,7 @@ import 'package:image_editor/model/float_text_model.dart';
 import '../image_editor.dart';
 import 'package:image_editor/extension/num_extension.dart';
 
+import 'image_editor_delegate.dart';
 import 'slider_widget.dart';
 
 
@@ -18,21 +19,16 @@ class TextEditorPage extends StatefulWidget {
 }
 
 class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding, WindowUiBinding{
+
+  static TextConfigModel get configModel => ImageEditor.uiDelegate.textConfigModel;
+
   final FocusNode _node = FocusNode();
 
   final GlobalKey filedKey = GlobalKey();
 
   final TextEditingController _controller = TextEditingController();
 
-  final List<Color> textColorList = const <Color>[
-    Color(0xFFFA4D32),
-    Color(0xFFFF7F1E),
-    Color(0xFF2DA24A),
-    Color(0xFFF2F2F2),
-    Color(0xFF222222),
-    Color(0xFF1F8BE5),
-    Color(0xFF4E43DB),
-  ];
+  final List<Color> textColorList = ImageEditor.uiDelegate.textColors;
 
   ///text's color
   late ValueNotifier<int> selectedColor;
@@ -40,7 +36,7 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
   Color get _textColor => Color(selectedColor.value);
 
   ///text's size
-  double _size = 14;
+  double _size = configModel.initSize;
 
   ///text font weight
   FontWeight _fontWeight = FontWeight.normal;
@@ -69,6 +65,8 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
   @override
   void initState() {
     super.initState();
+    assert(configModel.isLegal, "TextConfigModel config size is not legal : "
+        "initSize must middle in up and bottom limit");
     selectedColor = ValueNotifier(textColorList.first.value);
     Future.delayed(const Duration(milliseconds: 160), () {
       if (mounted) _node.requestFocus();
@@ -133,7 +131,7 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
                     minLines: 1,
                     controller: _controller,
                     focusNode: _node,
-                    cursorColor: const Color(0xFFF83112),
+                    cursorColor: configModel.cursorColor,
                     style: TextStyle(color: _textColor, fontSize: _size, fontWeight: _fontWeight),
                     decoration: InputDecoration(
                         isCollapsed: true,
@@ -198,18 +196,11 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
 
   Widget _buildSlider() {
     return SliderTheme(
-        data: SliderTheme.of(context).copyWith(
-          trackHeight: 2,
-          thumbColor: Colors.white,
-          disabledThumbColor: Colors.white,
-          activeTrackColor: const Color(0xFFF83112),
-          inactiveTrackColor: Colors.white.withOpacity(0.5),
-          overlayShape: CustomRoundSliderOverlayShape(),
-        ),
+        data: ImageEditor.uiDelegate.sliderThemeData(context),
         child: Slider(
           value: _size,
-          max: 36,
-          min: 14,
+          max: configModel.sliderUpLimit,
+          min: configModel.sliderBottomLimit,
           onChanged: (v) {
             _size = v;
             setState(() {});

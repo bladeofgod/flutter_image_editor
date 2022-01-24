@@ -32,15 +32,6 @@ class CustomRoundSliderOverlayShape extends SliderComponentShape {
         required double textScaleFactor,
         required Size sizeWithOverflow,
       }) {
-    assert(context != null);
-    assert(center != null);
-    assert(activationAnimation != null);
-    assert(enableAnimation != null);
-    assert(labelPainter != null);
-    assert(parentBox != null);
-    assert(sliderTheme != null);
-    assert(textDirection != null);
-    assert(value != null);
 
     final Canvas canvas = context.canvas;
     final Tween<double> radiusTween = Tween<double>(
