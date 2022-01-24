@@ -83,31 +83,65 @@ class DashBorder extends Border{
         BoxShape shape = BoxShape.rectangle,
         BorderRadius? borderRadius,
       }) {
+
+    Path getDashedPath({
+      required math.Point<double> a,
+      required math.Point<double> b,
+      required gap,
+    }) {
+      final Size size = Size(b.x - a.x, b.y - a.y);
+      final Path path = Path();
+      path.moveTo(a.x, a.y);
+      bool shouldDraw = true;
+      math.Point<double> currentPoint = math.Point<double>(a.x, a.y);
+
+      final num radians = math.atan(size.height / size.width);
+
+      final num dx = math.cos(radians) * gap < 0
+          ? math.cos(radians) * gap * -1
+          : math.cos(radians) * gap;
+
+      final num dy = math.sin(radians) * gap < 0
+          ? math.sin(radians) * gap * -1
+          : math.sin(radians) * gap;
+
+      while (currentPoint.x <= b.x && currentPoint.y <= b.y) {
+        shouldDraw
+            ? path.lineTo(currentPoint.x, currentPoint.y)
+            : path.moveTo(currentPoint.x, currentPoint.y);
+        shouldDraw = !shouldDraw;
+        currentPoint = math.Point(
+          currentPoint.x + dx,
+          currentPoint.y + dy,
+        );
+      }
+      return path;
+    }
     if (isUniform) {
-      Paint dashedPaint = Paint()
+      final Paint dashedPaint = Paint()
         ..color = dashColor
         ..strokeWidth = strokeWidth
         ..style = PaintingStyle.stroke;
       // top line
-      Path _topPath = getDashedPath(
+      final Path _topPath = getDashedPath(
         a: math.Point(rect.topLeft.dx, rect.topLeft.dy),
         b: math.Point(rect.topRight.dx, rect.topRight.dy),
         gap: gap,
       );
       // right line
-      Path _rightPath = getDashedPath(
+      final Path _rightPath = getDashedPath(
         a: math.Point(rect.topRight.dx, rect.topRight.dy),
         b: math.Point(rect.bottomRight.dx, rect.bottomRight.dy),
         gap: gap,
       );
       // bottom line
-      Path _bottomPath = getDashedPath(
+      final Path _bottomPath = getDashedPath(
         a: math.Point(rect.bottomLeft.dx, rect.bottomLeft.dy),
         b: math.Point(rect.bottomRight.dx, rect.bottomRight.dy),
         gap: gap,
       );
       // left line
-      Path _leftPath = getDashedPath(
+      final Path _leftPath = getDashedPath(
         a: math.Point(rect.topLeft.dx, rect.topLeft.dy),
         b: math.Point(rect.bottomLeft.dx, rect.bottomLeft.dy),
         gap: gap,
@@ -121,42 +155,6 @@ class DashBorder extends Border{
 
     paintBorder(canvas, rect, top: top, right: right, bottom: bottom, left: left);
   }
-
-  Path getDashedPath({
-    required math.Point<double> a,
-    required math.Point<double> b,
-    required gap,
-  }) {
-    Size size = Size(b.x - a.x, b.y - a.y);
-    Path path = Path();
-    path.moveTo(a.x, a.y);
-    bool shouldDraw = true;
-    math.Point<double> currentPoint = math.Point<double>(a.x, a.y);
-
-    num radians = math.atan(size.height / size.width);
-
-    num dx = math.cos(radians) * gap < 0
-        ? math.cos(radians) * gap * -1
-        : math.cos(radians) * gap;
-
-    num dy = math.sin(radians) * gap < 0
-        ? math.sin(radians) * gap * -1
-        : math.sin(radians) * gap;
-
-    while (currentPoint.x <= b.x && currentPoint.y <= b.y) {
-      shouldDraw
-          ? path.lineTo(currentPoint.x, currentPoint.y)
-          : path.moveTo(currentPoint.x, currentPoint.y);
-      shouldDraw = !shouldDraw;
-      currentPoint = math.Point(
-        currentPoint.x + dx,
-        currentPoint.y + dy,
-      );
-    }
-    return path;
-  }
-
-
 
 }
 
