@@ -329,6 +329,8 @@ class ImageEditorState extends State<ImageEditor>
 
 }
 
+///Little widget binding is for unified manage the widgets that has common style.
+/// * If you wanna custom this part, see [ImageEditorDelegate]
 mixin LittleWidgetBinding<T extends StatefulWidget> on State<T> {
   
   ///go back widget
