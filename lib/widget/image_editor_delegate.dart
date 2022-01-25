@@ -186,7 +186,7 @@ abstract class ImageEditorDelegate{
   SliderThemeData sliderThemeData(BuildContext context);
 
   ///Text config model
-  /// * more see [TextEditorPage]
+  /// * see also: [TextEditorPage]
   TextConfigModel get textConfigModel;
 
   ///Back button on appbar
