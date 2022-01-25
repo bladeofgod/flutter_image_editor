@@ -531,6 +531,11 @@ mixin TextCanvasBinding<T extends StatefulWidget> on State<T> {
 
 ///drawing board
 mixin SignatureBinding<T extends StatefulWidget> on State<T> {
+
+
+  ///Canvas layer for each draw action action.
+  /// * e.g. First draw some path with white color, than change the color and draw some path again.
+  /// * After this [pathRecord] will save 2 layes in it.
   final List<Widget> pathRecord = [];
 
   late StateSetter canvasSetter;
