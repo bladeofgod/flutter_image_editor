@@ -59,7 +59,7 @@ class ImageEditorState extends State<ImageEditor>
 
   double get headerHeight => windowStatusBarHeight;
 
-  double get bottomBarHeight => 121 + windowBottomBarHeight;
+  double get bottomBarHeight => 105 + windowBottomBarHeight;
 
   ///Edit arear height.
   double get canvasHeight => screenHeight - bottomBarHeight - headerHeight;
@@ -199,11 +199,10 @@ class ImageEditorState extends State<ImageEditor>
       color: Colors.black,
       width: screenWidth,
       height: bottomBarHeight,
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.only(left: 16, right: 16, bottom: windowBottomBarHeight),
       child: Column(
         children: [
-          SizedBox(
-            height: bottomBarHeight / 2,
+          Expanded(
             child: ValueListenableBuilder<OperateType>(
               valueListenable: _panelController.operateType,
               builder: (ctx, value, child) {
@@ -233,8 +232,7 @@ class ImageEditorState extends State<ImageEditor>
               },
             ),
           ),
-          SizedBox(
-            height: bottomBarHeight / 2,
+          Expanded(
             child: Row(
               children: [
                 _buildButton(OperateType.brush, 'Draw', onPressed: () {
