@@ -218,6 +218,7 @@ class ImageEditorState extends State<ImageEditor>
                           color: e,
                           valueListenable: _panelController.colorSelected,
                           onColorSelected: (color) {
+                            if(pColor.value == color.value) return;
                             changePainterColor(color);
                           },
                         ))
@@ -564,7 +565,6 @@ mixin SignatureBinding<T extends StatefulWidget> on State<T> {
 
   ///change painter's color
   void changePainterColor(Color color) async {
-    if(pColor.value == color.value) return;
     pColor = color;
     realState?._panelController.selectColor(color);
     pathRecord.insert(
