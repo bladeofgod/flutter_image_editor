@@ -530,6 +530,7 @@ mixin TextCanvasBinding<T extends StatefulWidget> on State<T> {
 ///drawing board
 mixin SignatureBinding<T extends StatefulWidget> on State<T> {
 
+  DrawStyle get lastDrawStyle => painterController.drawStyle;
 
   ///Canvas layer for each draw action action.
   /// * e.g. First draw some path with white color, than change the color and draw some path again.
@@ -556,12 +557,14 @@ mixin SignatureBinding<T extends StatefulWidget> on State<T> {
   ///switch painter's style
   /// * e.g. color、mosaic
   void switchPainterMode(DrawStyle style) {
+    if(lastDrawStyle == style) return;
     changePainterColor(pColor);
     painterController.drawStyle = style;
   }
 
   ///change painter's color
   void changePainterColor(Color color) async {
+    if(pColor.value == color.value) return;
     pColor = color;
     realState?._panelController.selectColor(color);
     pathRecord.insert(
