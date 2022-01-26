@@ -138,7 +138,7 @@ class SignatureState extends State<Signature> {
       setState(() {
         //IF USER WAS OUTSIDE OF CANVAS WE WILL RESET THE HELPER VARIABLE AS HE HAS RETURNED
         _isOutsideDrawField = false;
-        widget.controller.addPoint(Point(o, t));
+        widget.controller.addPoint(Point(o, t, event.pointer));
       });
     } else {
       //NOTE: USER LEFT THE CANVAS!!! WE WILL SET HELPER VARIABLE
@@ -160,13 +160,15 @@ enum PointType {
 /// one point on canvas represented by offset and type
 class Point {
   /// constructor
-  Point(this.offset, this.type);
+  Point(this.offset, this.type, this.eventId);
 
   /// x and y value on 2D canvas
   Offset offset;
 
   /// type of user display finger movement
   PointType type;
+
+  int eventId;
 }
 
 class SignaturePainter extends CustomPainter {
@@ -175,6 +177,7 @@ class SignaturePainter extends CustomPainter {
         super(repaint: _controller) {
     _penStyle
       ..color = _controller.penColor
+      ..style = PaintingStyle.stroke
       ..strokeWidth = _controller.penStrokeWidth;
 
   }
@@ -189,6 +192,7 @@ class SignaturePainter extends CustomPainter {
     if (points.isEmpty) {
       return;
     }
+    //for draw [DrawStyle.mosaic]
     void paintMosaic(Offset center) {
       final ui.Paint paint = ui.Paint()..color = Colors.black26;
       final double size = _controller.mosaicWidth;
@@ -223,40 +227,44 @@ class SignaturePainter extends CustomPainter {
 
     }
 
-    //reduce the frequency of mosaic drawing.
-    bool jumpPaint(int index) => index % 3 == 0;
+    //for draw [DrawStyle.normal]
+    Path paintPath() {
+      final Path path = Path();
+      final Map<int, List<Point>> pathM = {};
+      points.forEach((element) {
+        if(pathM[element.eventId] == null)
+          pathM[element.eventId] = [];
+        pathM[element.eventId]!.add(element);
+      });
 
-    for (int i = 0; i < (points.length - 1); i++) {
-      if (points[i + 1].type == PointType.move) {
-        switch(_controller.drawStyle) {
-          case DrawStyle.normal:
-            canvas.drawLine(
-              points[i].offset,
-              points[i + 1].offset,
-              _penStyle,
-            );
-            break;
-          case DrawStyle.mosaic:
-            if(jumpPaint(i))
-              paintMosaic(points[i].offset);
-            break;
+      pathM.forEach((key, value) {
+        final first = value.first;
+        path.moveTo(first.offset.dx, first.offset.dy);
+        if(value.length <= 3) {
+          _penStyle.style = PaintingStyle.fill;
+          canvas.drawCircle(first.offset, _controller.penStrokeWidth,_penStyle);
+          _penStyle.style = PaintingStyle.stroke;
+        } else {
+          value.forEach((e) {
+            path.lineTo(e.offset.dx, e.offset.dy);
+          });
         }
-      } else {
-        switch(_controller.drawStyle) {
-          case DrawStyle.normal:
-            canvas.drawCircle(
-              points[i].offset,
-              _penStyle.strokeWidth / 2,
-              _penStyle,
-            );
-            break;
-          case DrawStyle.mosaic:
-            if(jumpPaint(i))
-              paintMosaic(points[i].offset);
-            break;
-        }
-      }
+      });
+      return path;
     }
+
+    switch(_controller.drawStyle) {
+      case DrawStyle.normal:
+        canvas.drawPath(paintPath(), _penStyle);
+        break;
+      case DrawStyle.mosaic:
+      //reduce the frequency of mosaic drawing.
+        for(int i=0; i < points.length; i+=2) {
+          paintMosaic(points[i].offset);
+        }
+        break;
+    }
+
   }
 
   @override
@@ -476,7 +484,9 @@ class SignatureController extends ValueNotifier<List<Point>> {
             point.offset.dx - minX + penStrokeWidth,
             point.offset.dy - minY + penStrokeWidth,
           ),
-          point.type));
+          point.type,
+        point.eventId,
+      ));
     }
 
     final int width = (maxX - minX + penStrokeWidth * 2).toInt();
