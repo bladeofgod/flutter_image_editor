@@ -117,6 +117,25 @@ class DefaultImageEditorDelegate extends ImageEditorDelegate{
   @override
   Widget undoWidget(double limitSize) => Icon(Icons.undo, size: limitSize, color: Colors.white);
 
+  @override
+  Widget get boldTagWidget => Text(
+    'Bold',
+    style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
+  );
+
+  @override
+  Widget get sliderLeftWidget => _txtFlatWidget('small');
+
+  @override
+  Widget get sliderRightWidget => _txtFlatWidget('big');
+
+  Widget _txtFlatWidget(String txt) {
+    return Text(
+      txt,
+      style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 13),
+    );
+  }
+
 }
 
 
@@ -184,6 +203,17 @@ abstract class ImageEditorDelegate{
 
   ///Slider's theme data
   SliderThemeData sliderThemeData(BuildContext context);
+
+  ///Slider's tag
+  /// * left-flag(small) - Slider - right-flag(big)
+  Widget get sliderLeftWidget;
+
+  ///Slider's tag
+  /// * left-flag(small) - Slider - right-flag(big)
+  Widget get sliderRightWidget;
+
+  ///To control the text style of bold.
+  Widget get boldTagWidget;
 
   ///Text config model
   /// * see also: [TextEditorPage]

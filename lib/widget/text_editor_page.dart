@@ -150,17 +150,14 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
                     children: [
                       GestureDetector(
                         onTap: tapBoldBtn,
-                        child: Text(
-                          'Bold',
-                          style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
+                        child: ImageEditor.uiDelegate.boldTagWidget,
                       ),
                       24.hGap,
-                      txtFlatWidget('small'),
+                      ImageEditor.uiDelegate.sliderLeftWidget,
                       8.hGap,
                       Expanded(child: _buildSlider()),
                       8.hGap,
-                      txtFlatWidget('big'),
+                      ImageEditor.uiDelegate.sliderRightWidget,
                       2.hGap,
                     ],
                   ),
@@ -208,11 +205,6 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
         ));
   }
 
-  Widget txtFlatWidget(String txt) {
-    return Text(
-      txt,
-      style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 13),
-    );
-  }
+
 
 }
