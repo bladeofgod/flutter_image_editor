@@ -82,111 +82,117 @@ class TextEditorPageState extends State<TextEditorPage> with LittleWidgetBinding
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Stack(
-        children: [
-          ClipRect(
-            child: BackdropFilter(
+    return GestureDetector(
+      onTap: () {
+        if(!_node.hasFocus)
+          _node.requestFocus();
+      },
+      child: Material(
+        color: Colors.transparent,
+        child: Stack(
+          children: [
+            ClipRect(
+              child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                width: double.infinity, height: double.infinity,
-                color: Colors.black38,),
-            ),
-          ),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            resizeToAvoidBottomInset: true,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
                 child: Container(
-                  height: 44,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 16),),
-                ),
+                  width: double.infinity, height: double.infinity,
+                  color: Colors.black38,),
               ),
-              actions: [
-                Padding(
-                  padding: EdgeInsets.only(top: 12, bottom: 12 , right: 16),
-                  child: doneButtonWidget(onPressed: popWithResult),
-                ),
-              ],
             ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(child: SizedBox()),
-                //text area
-                Container(
-                  width: screenWidth,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: TextField(
-                    key: filedKey,
-                    maxLines: 50,
-                    minLines: 1,
-                    controller: _controller,
-                    focusNode: _node,
-                    cursorColor: configModel.cursorColor,
-                    style: TextStyle(color: _textColor, fontSize: _size, fontWeight: _fontWeight),
-                    decoration: InputDecoration(
-                        isCollapsed: true,
-                        border: InputBorder.none
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              resizeToAvoidBottomInset: true,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                leading: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: 44,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(top: 12, bottom: 12),
+                    child: Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 16),),
+                  ),
+                ),
+                actions: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 12, bottom: 12 , right: 16),
+                    child: doneButtonWidget(onPressed: popWithResult),
+                  ),
+                ],
+              ),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: SizedBox()),
+                  //text area
+                  Container(
+                    width: screenWidth,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      key: filedKey,
+                      maxLines: 50,
+                      minLines: 1,
+                      controller: _controller,
+                      focusNode: _node,
+                      cursorColor: configModel.cursorColor,
+                      style: TextStyle(color: _textColor, fontSize: _size, fontWeight: _fontWeight),
+                      decoration: InputDecoration(
+                          isCollapsed: true,
+                          border: InputBorder.none
+                      ),
                     ),
                   ),
-                ),
-                Expanded(child: SizedBox()),
-                //slider
-                Container(
-                  height: 36,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  //color: Colors.white,
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: tapBoldBtn,
-                        child: ImageEditor.uiDelegate.boldTagWidget,
-                      ),
-                      24.hGap,
-                      ImageEditor.uiDelegate.sliderLeftWidget,
-                      8.hGap,
-                      Expanded(child: _buildSlider()),
-                      8.hGap,
-                      ImageEditor.uiDelegate.sliderRightWidget,
-                      2.hGap,
-                    ],
+                  Expanded(child: SizedBox()),
+                  //slider
+                  Container(
+                    height: 36,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    width: double.infinity,
+                    //color: Colors.white,
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: tapBoldBtn,
+                          child: ImageEditor.uiDelegate.boldTagWidget,
+                        ),
+                        24.hGap,
+                        ImageEditor.uiDelegate.sliderLeftWidget,
+                        8.hGap,
+                        Expanded(child: _buildSlider()),
+                        8.hGap,
+                        ImageEditor.uiDelegate.sliderRightWidget,
+                        2.hGap,
+                      ],
+                    ),
                   ),
-                ),
-                //color selector
-                Container(
-                  height: 41,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  //color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: textColorList
-                        .map<Widget>((e) => CircleColorWidget(
-                      color: e,
-                      valueListenable: selectedColor,
-                      onColorSelected: (color) {
-                        setState(() {
-                          selectedColor.value = color.value;
-                        });
-                      },
-                    ))
-                        .toList(),
+                  //color selector
+                  Container(
+                    height: 41,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    width: double.infinity,
+                    //color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: textColorList
+                          .map<Widget>((e) => CircleColorWidget(
+                        color: e,
+                        valueListenable: selectedColor,
+                        onColorSelected: (color) {
+                          setState(() {
+                            selectedColor.value = color.value;
+                          });
+                        },
+                      ))
+                          .toList(),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
