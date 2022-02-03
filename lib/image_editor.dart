@@ -61,7 +61,7 @@ class ImageEditorState extends State<ImageEditor>
 
   double get bottomBarHeight => 105 + windowBottomBarHeight;
 
-  ///Edit arear height.
+  ///Edit area height.
   double get canvasHeight => screenHeight - bottomBarHeight - headerHeight;
 
   ///Operation panel button's horizontal space.
