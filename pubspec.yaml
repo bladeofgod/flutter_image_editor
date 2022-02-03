@@ -1,6 +1,6 @@
 name: image_editor
 description: An image editor with crop, scribble, mosaic, add-text, flip, rotated functions.
-version: 0.0.1
+version: 1.0.1
 homepage: https://github.com/bladeofgod/flutter_image_editor
 
 environment:
