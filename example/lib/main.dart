@@ -44,15 +44,15 @@ class _HomePageState extends State<HomePage> {
 
   final picker = ImagePicker();
 
-  Future<void> getimageditor(File origin) async {
+  Future<void> toImageEditor(File origin) async {
     return Navigator.push(context, MaterialPageRoute(builder: (context) {
       return ImageEditor(
         originImage: origin,
       );
-    })).then((geteditimage) {
-      if (geteditimage is EditorImageResult) {
+    })).then((result) {
+      if (result is EditorImageResult) {
         setState(() {
-          _image = geteditimage.newFile;
+          _image = result.newFile;
         });
       }
     }).catchError((er) {
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     await picker.getImage(source: ImageSource.gallery);
     if(image != null) {
       final File origin = File(image.path);
-      getimageditor(origin);
+      toImageEditor(origin);
     }
   }
 
