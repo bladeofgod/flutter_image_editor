@@ -1,13 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:image_editor/model/float_text_model.dart';
+import 'package:image_editor_dove/extension/num_extension.dart';
+import 'package:image_editor_dove/model/float_text_model.dart';
 
 import '../image_editor.dart';
-import 'package:image_editor/extension/num_extension.dart';
-
 import 'image_editor_delegate.dart';
-import 'slider_widget.dart';
 
 
 ///A page for input some text to canvas.

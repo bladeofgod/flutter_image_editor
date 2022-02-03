@@ -1,9 +1,9 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:image_editor/flutter_image_editor.dart';
-import 'package:image_editor/widget/float_text_widget.dart';
-import 'package:image_editor/widget/text_editor_page.dart';
+import 'package:image_editor_dove/flutter_image_editor.dart';
+import 'package:image_editor_dove/widget/float_text_widget.dart';
+import 'package:image_editor_dove/widget/text_editor_page.dart';
 
 import 'editor_panel_controller.dart';
 import 'slider_widget.dart';

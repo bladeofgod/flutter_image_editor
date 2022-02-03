@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:image_editor/widget/image_editor_delegate.dart';
+
 import 'dart:ui' as ui;
 
 import 'extension/num_extension.dart';
@@ -14,6 +14,7 @@ import 'model/float_text_model.dart';
 import 'widget/drawing_board.dart';
 import 'widget/editor_panel_controller.dart';
 import 'widget/float_text_widget.dart';
+import 'widget/image_editor_delegate.dart';
 import 'widget/text_editor_page.dart';
 
 
