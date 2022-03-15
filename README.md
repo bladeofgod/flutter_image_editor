@@ -1,4 +1,4 @@
-# image_editor
+# image_editor_dove
 
 A high-performance image editor with crop, scribble, mosaic, add-text, flip, rotated functions.
 

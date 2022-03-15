@@ -1,5 +1,9 @@
 buildscript {
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven {url 'http://download.flutter.io'}
         google()
         jcenter()
     }
@@ -11,6 +15,10 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven {url 'http://download.flutter.io'}
         google()
         jcenter()
     }

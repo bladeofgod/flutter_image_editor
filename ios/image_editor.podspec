@@ -3,7 +3,7 @@
 # Run `pod lib lint image_editor.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'image_editor'
+  s.name             = 'image_editor_dove'
   s.version          = '0.0.1'
   s.summary          = 'An image editor with crop, scribble, mosaic, add-text, flip, rotated functions.'
   s.description      = <<-DESC

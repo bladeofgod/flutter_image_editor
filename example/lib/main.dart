@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_editor_dove/image_editor.dart';
 import 'dart:async';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:image_editor/flutter_image_editor.dart';
+
 
 void main() {
   runApp(MyApp());
