@@ -17,6 +17,7 @@ import 'widget/float_text_widget.dart';
 import 'widget/image_editor_delegate.dart';
 import 'widget/text_editor_page.dart';
 
+const CanvasLauncher _defaultLauncher = CanvasLauncher(mosaicWidth: 5.0, pStrockWidth: 5.0, pColor: Colors.red);
 
 ///The editor's result.
 class EditorImageResult {
@@ -32,9 +33,34 @@ class EditorImageResult {
   EditorImageResult(this.imgWidth, this.imgHeight, this.newFile);
 }
 
+
+///The launcher provides some initial-values for canvas;
+class CanvasLauncher{
+
+  factory CanvasLauncher.auto() {
+    return const CanvasLauncher(mosaicWidth: 5.0, pStrockWidth: 5.0, pColor: Colors.red);
+  }
+
+  const CanvasLauncher({required this.mosaicWidth, required this.pStrockWidth, required this.pColor});
+
+  ///mosaic pixel's width
+  final double mosaicWidth;
+
+  ///painter stroke width.
+  final double pStrockWidth;
+
+  ///painter color
+  final Color pColor;
+
+}
+
 class ImageEditor extends StatefulWidget {
 
-  const ImageEditor({Key? key, required this.originImage, this.savePath}) : super(key: key);
+  const ImageEditor({Key? key,
+    required this.originImage,
+    this.savePath,
+    this.launcher = _defaultLauncher})
+      : super(key: key);
 
   ///origin image
   /// * input for edit
@@ -43,6 +69,9 @@ class ImageEditor extends StatefulWidget {
   ///edited-file's save path.
   /// * if null will save in temporary file.
   final Directory? savePath;
+
+  ///provide some initial value
+  final CanvasLauncher launcher;
 
   ///[uiDelegate] is determine the editor's ui style.
   ///You can extends [ImageEditorDelegate] and custome it by youself.
@@ -530,7 +559,7 @@ mixin TextCanvasBinding<T extends StatefulWidget> on State<T> {
 }
 
 ///drawing board
-mixin SignatureBinding<T extends StatefulWidget> on State<T> {
+mixin SignatureBinding<T extends StatefulWidget> on State<ImageEditor> {
 
   DrawStyle get lastDrawStyle => painterController.drawStyle;
 
@@ -540,6 +569,9 @@ mixin SignatureBinding<T extends StatefulWidget> on State<T> {
   final List<Widget> pathRecord = [];
 
   late StateSetter canvasSetter;
+
+  ///mosaic pixel's width
+  double mosaicWidth = 5.0;
 
   ///painter stroke width.
   double pStrockWidth = 5;
@@ -553,7 +585,9 @@ mixin SignatureBinding<T extends StatefulWidget> on State<T> {
   @override
   void initState() {
     super.initState();
-    pColor = Color(realState?._panelController.colorSelected.value ?? Colors.yellow.value);
+    pColor = widget.launcher.pColor;
+    mosaicWidth = widget.launcher.mosaicWidth;
+    pStrockWidth = widget.launcher.pStrockWidth;
   }
 
   ///switch painter's style
@@ -604,7 +638,7 @@ mixin SignatureBinding<T extends StatefulWidget> on State<T> {
   }
 
   void initPainter() {
-    painterController = SignatureController(penStrokeWidth: pStrockWidth, penColor: pColor);
+    painterController = SignatureController(penStrokeWidth: pStrockWidth, penColor: pColor, mosaicWidth: mosaicWidth);
   }
 
   Widget _buildBrushCanvas() {
