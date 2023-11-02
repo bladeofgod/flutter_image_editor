@@ -1,6 +1,6 @@
 name: image_editor_dove
 description: An image editor with crop, scribble, mosaic, add-text, flip, rotated functions.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/bladeofgod/flutter_image_editor
 
 environment:
