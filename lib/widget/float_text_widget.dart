@@ -27,7 +27,7 @@ class FloatTextWidgetState extends State<FloatTextWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if(mounted) {
         RenderObject? ro = context.findRenderObject();
         if(ro is RenderBox) {
