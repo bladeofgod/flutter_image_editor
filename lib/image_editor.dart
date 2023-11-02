@@ -684,9 +684,9 @@ mixin WindowUiBinding<T extends StatefulWidget> on State<T> {
 
   Size get windowSize => MediaQuery.of(context).size;
 
-  double get windowStatusBarHeight => ui.window.padding.top;
+  double get windowStatusBarHeight => View.of(context).padding.top;
 
-  double get windowBottomBarHeight => ui.window.padding.bottom;
+  double get windowBottomBarHeight => View.of(context).padding.bottom;
 
   double get screenWidth => windowSize.width;
 

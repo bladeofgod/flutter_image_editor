@@ -86,7 +86,7 @@ class EditorPanelController {
   MoveStuff moveStuff = MoveStuff.non;
 
   ///trash can position
-  Offset trashCanPosition = Offset(111, (20 + window.padding.bottom));
+  Offset trashCanPosition = Offset(111, (20 + (PlatformDispatcher.instance.implicitView?.padding.bottom ?? 0)));
 
   ///trash can size.
   final Size tcSize = Size(153, 77);
