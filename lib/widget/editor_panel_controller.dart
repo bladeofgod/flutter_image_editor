@@ -74,6 +74,12 @@ class EditorPanelController {
     operateType.value = type;
   }
 
+  void cancelOperateType() {
+    operateType.value = OperateType.non;
+  }
+
+  OperateType get currentOperateType => operateType.value;
+
 
   ///moving object
   /// * non : not moving.

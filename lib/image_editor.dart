@@ -165,7 +165,7 @@ class ImageEditorState extends State<ImageEditor>
           child: Stack(
             alignment: Alignment.center,
             children: [
-              _buildImage(),
+              InteractiveViewer(child: _buildImage()),
               _buildBrushCanvas(),
               //buildTextCanvas(),
             ],
@@ -337,8 +337,12 @@ class ImageEditorState extends State<ImageEditor>
   Widget _buildButton(OperateType type, String txt, {VoidCallback? onPressed}) {
     return GestureDetector(
       onTap: () {
-        _panelController.switchOperateType(type);
-        onPressed?.call();
+        if(type == _panelController.currentOperateType) {
+          _panelController.cancelOperateType();
+        } else {
+          _panelController.switchOperateType(type);
+          onPressed?.call();
+        }
       },
       child: ValueListenableBuilder(
         valueListenable: _panelController.operateType,
